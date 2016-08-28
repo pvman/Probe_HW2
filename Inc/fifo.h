@@ -6,13 +6,13 @@
 //size: 4,8,16,32...128
 #define FIFO( size )\
   struct {\
-    unsigned char buf[size];\
+    unsigned short buf[size];\
     unsigned short tail;\
     unsigned short head;\
   } 
  
 FIFO(1024)		SPI_to_FIFO_to_USBtx;
-FIFO(1024)		USBrx_to_FIFO_to_SPI;	
+FIFO(128)		USBrx_to_FIFO_to_SPI;	
 	
 //the number of elements in the queue
 #define FIFO_COUNT(fifo)     (fifo.head-fifo.tail)

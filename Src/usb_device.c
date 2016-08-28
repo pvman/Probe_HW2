@@ -40,6 +40,8 @@
 #include "usbd_cdc.h"
 #include "usbd_cdc_if.h"
 
+extern uint8_t	USB_Init_flag;
+
 /* USB Device Core handle declaration */
 USBD_HandleTypeDef hUsbDeviceFS;
 
@@ -54,6 +56,25 @@ void MX_USB_DEVICE_Init(void)
   USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
 
   USBD_Start(&hUsbDeviceFS);
+	
+	USB_Init_flag = 1;
+
+}
+
+
+/* Deinit function */				        
+void MX_USB_DEVICE_DeInit(void)
+{
+  /* Init Device Library,Add Supported Class and Start the library*/
+  USBD_DeInit(&hUsbDeviceFS);
+
+ // USBD_RegisterClass(&hUsbDeviceFS, &USBD_CDC);
+
+ // USBD_CDC_RegisterInterface(&hUsbDeviceFS, &USBD_Interface_fops_FS);
+
+  USBD_Stop(&hUsbDeviceFS); //
+	
+	USB_Init_flag = 0;
 
 }
 /**

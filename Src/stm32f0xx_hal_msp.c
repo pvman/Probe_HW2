@@ -123,37 +123,7 @@ void HAL_SPI_MspDeInit(SPI_HandleTypeDef* hspi)
 
 }
 
-void HAL_UART_MspInit(UART_HandleTypeDef* huart)
-{
 
-  GPIO_InitTypeDef GPIO_InitStruct;
-  if(huart->Instance==USART2)
-  {
-  /* USER CODE BEGIN USART2_MspInit 0 */
-
-  /* USER CODE END USART2_MspInit 0 */
-    /* Peripheral clock enable */
-    __HAL_RCC_USART2_CLK_ENABLE();
-  
-    /**USART2 GPIO Configuration    
-    PA2     ------> USART2_TX
-    PA15     ------> USART2_RX 
-    */
-    GPIO_InitStruct.Pin = VCP_TX_Pin|VCP_RX_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLUP;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStruct.Alternate = GPIO_AF1_USART2;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-    /* Peripheral interrupt DeInit*/
-    HAL_NVIC_DisableIRQ(SPI1_IRQn);
-		
-  /* USER CODE BEGIN USART2_MspInit 1 */
-
-  /* USER CODE END USART2_MspInit 1 */
-  }
-
-}
 
 
 /* USER CODE BEGIN 1 */

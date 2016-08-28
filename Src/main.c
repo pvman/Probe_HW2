@@ -38,15 +38,15 @@
 #include <stdbool.h>
 #include "usbd_cdc_if.h"
 
-uint8_t transmitBuffer_to_SPI[2]; //temp buffer
-uint8_t transmitBuffer_to_USB[2];
-uint8_t receiveBuffer_from_SPI[2]; //temp buffer
+uint16_t transmitBuffer_to_SPI[2]; //temp buffer
+uint16_t transmitBuffer_to_USB[2];
+uint16_t receiveBuffer_from_SPI[2]; //temp buffer
 
-
+uint8_t	USB_Init_flag;
 
 extern SPI_HandleTypeDef hspi1;
 
-bool SPI_received; // 0 - NOT Received, 1 - Received
+uint16_t SPI_received; //test for identity
 
 
 
@@ -58,7 +58,12 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi);
 
 int main(void)
 {
-	int8_t	temp = 0;
+	uint16_t delay_temp, delay_count;
+	
+	
+	SPI_received = 0;
+	
+	USB_Init_flag = 0;
 	
 		RCC->APB2ENR |= RCC_APB2ENR_SYSCFGCOMPEN;	
 	// remap pins to enable USB
@@ -80,14 +85,17 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_USB_DEVICE_Init();
+//	MX_USB_DEVICE_Init();
 	
-	transmitBuffer_to_SPI[0] = 0x12;
-	transmitBuffer_to_SPI[1] = 0x34;
-	HAL_SPI_TransmitReceive_IT(&hspi1, &transmitBuffer_to_SPI[0], &receiveBuffer_from_SPI[0], 1);
+	transmitBuffer_to_SPI[0] = 0;
+	//transmitBuffer_to_SPI[1] = 0x02;
+//	HAL_SPI_TransmitReceive_IT(&hspi1, &transmitBuffer_to_SPI[0], &receiveBuffer_from_SPI[0], 1);
 	
 	FIFO_FLUSH(SPI_to_FIFO_to_USBtx)
 	FIFO_FLUSH(USBrx_to_FIFO_to_SPI)
+	
+	delay_temp=HAL_GetTick();
+	delay_count=500;
 
   /* USER CODE BEGIN 2 */
 
@@ -99,23 +107,47 @@ int main(void)
   {
 		if (USB_Cable_Detect())
 		{
-			RF_RX_On();
+			if (HAL_GetTick()-delay_temp>delay_count)
+			{	
 			
+			
+			if (!USB_Init_flag)
+			{
+				SystemClock_Config();
+				MX_USB_DEVICE_Init();
+				RF_RX_On();
+			}
+			}
 //			temp = FIFO_IS_EMPTY(SPI_to_FIFO_to_USBtx);
 			
-			if (!FIFO_IS_EMPTY(SPI_to_FIFO_to_USBtx))
+			if (HAL_SPI_TransmitReceive_IT(&hspi1, (uint8_t*)transmitBuffer_to_SPI, (uint8_t*)receiveBuffer_from_SPI, 1) == HAL_OK)
 			{
-				transmitBuffer_to_USB[0] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
-				FIFO_POP(SPI_to_FIFO_to_USBtx)
-		//		transmitBuffer_to_USB[1] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
-		//		FIFO_POP(SPI_to_FIFO_to_USBtx)		
-
-				CDC_Transmit_FS(transmitBuffer_to_USB, 1);		//send to USB		
-			}		
+				
+				
+			}
+			
+			if (USB_Init_flag)
+			{
+				if (!FIFO_IS_EMPTY(SPI_to_FIFO_to_USBtx))
+				{
+					if (FIFO_SPACE(SPI_to_FIFO_to_USBtx) < 1024)
+					{
+						transmitBuffer_to_USB[0] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
+						FIFO_POP(SPI_to_FIFO_to_USBtx)
+						CDC_Transmit_FS((uint8_t*)transmitBuffer_to_USB, 2);		//send to USB		
+					}
+				}	
+			}
+			
 		}
 		else
 		{
 			RF_RX_Off();
+				//	if (USB_Init_flag)
+					{
+						MX_USB_DEVICE_DeInit();
+						 delay_temp=HAL_GetTick();
+					}
 		}
 		
 
@@ -137,14 +169,19 @@ int main(void)
 
 
 
-void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
 if (hspi->Instance == hspi1.Instance)
 {
-	SPI_received = true;
+	if	(SPI_received == receiveBuffer_from_SPI[0]) //test for identity
+	{
+		return; 
+	}
+	
 	
 	if (!FIFO_IS_FULL(SPI_to_FIFO_to_USBtx))
 	{
+		SPI_received = receiveBuffer_from_SPI[0];
 		FIFO_PUSH (SPI_to_FIFO_to_USBtx, receiveBuffer_from_SPI[0]);
 //		FIFO_PUSH (SPI_to_FIFO_to_USBtx, receiveBuffer_from_SPI[1]);
 	}
