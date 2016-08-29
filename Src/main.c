@@ -38,9 +38,9 @@
 #include <stdbool.h>
 #include "usbd_cdc_if.h"
 
-uint8_t transmitBuffer_to_SPI[2]; //temp buffer
+uint16_t transmitBuffer_to_SPI[2]; //temp buffer
 uint8_t transmitBuffer_to_USB[2];
-uint8_t receiveBuffer_from_SPI[2]; //temp buffer
+uint16_t receiveBuffer_from_SPI[2]; //temp buffer
 
 
 
@@ -80,11 +80,11 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_USB_DEVICE_Init();
+	MX_USB_DEVICE_Init();
 	
-	transmitBuffer_to_SPI[0] = 0x12;
-	transmitBuffer_to_SPI[1] = 0x34;
-	HAL_SPI_TransmitReceive_IT(&hspi1, &transmitBuffer_to_SPI[0], &receiveBuffer_from_SPI[0], 1);
+	transmitBuffer_to_SPI[0] = 0x01;
+	transmitBuffer_to_SPI[1] = 0x02;
+
 	
 	FIFO_FLUSH(SPI_to_FIFO_to_USBtx)
 	FIFO_FLUSH(USBrx_to_FIFO_to_SPI)
@@ -103,14 +103,20 @@ int main(void)
 			
 //			temp = FIFO_IS_EMPTY(SPI_to_FIFO_to_USBtx);
 			
+			if (HAL_SPI_TransmitReceive_IT(&hspi1, &transmitBuffer_to_SPI[0], &receiveBuffer_from_SPI[0], 1) == HAL_OK)
+			{	}
+			
+			
 			if (!FIFO_IS_EMPTY(SPI_to_FIFO_to_USBtx))
 			{
-				transmitBuffer_to_USB[0] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
-				FIFO_POP(SPI_to_FIFO_to_USBtx)
-		//		transmitBuffer_to_USB[1] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
-		//		FIFO_POP(SPI_to_FIFO_to_USBtx)		
+				if (FIFO_SPACE(SPI_to_FIFO_to_USBtx) < 1024)
+				{
+					transmitBuffer_to_USB[0] = FIFO_FRONT(SPI_to_FIFO_to_USBtx);
+					FIFO_POP(SPI_to_FIFO_to_USBtx)
+	
 
-				CDC_Transmit_FS(transmitBuffer_to_USB, 1);		//send to USB		
+					CDC_Transmit_FS(transmitBuffer_to_USB, 1);		//send to USB		
+				}
 			}		
 		}
 		else
@@ -137,7 +143,7 @@ int main(void)
 
 
 
-void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
 if (hspi->Instance == hspi1.Instance)
 {
