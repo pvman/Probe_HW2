@@ -151,7 +151,11 @@
           <Type>0</Type>
           <LineNumber>117</LineNumber>
           <EnabledFlag>1</EnabledFlag>
+<<<<<<< HEAD
           <Address>134230156</Address>
+=======
+          <Address>134230448</Address>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -165,49 +169,82 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
+<<<<<<< HEAD
           <LineNumber>115</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>134230144</Address>
+=======
+          <LineNumber>286</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134218372</Address>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
+<<<<<<< HEAD
           <Filename>../Src/main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\Probe_HW2\../Src/main.c\115</Expression>
+=======
+          <Filename>../Src/usbd_cdc_if.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Probe_HW2\../Src/usbd_cdc_if.c\286</Expression>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>hspi-&gt;RxISR</ItemText>
+=======
+          <ItemText>receiveBuffer_from_SPI[0]</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>hspi</ItemText>
+=======
+          <ItemText>SPI_to_FIFO_to_USBtx</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>itflag</ItemText>
+=======
+          <ItemText>SPI_to_FIFO_to_USBtx</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>receiveBuffer_from_SPI[0]</ItemText>
+=======
+          <ItemText>Buf</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>hspi-&gt;TxXferCount</ItemText>
+=======
+          <ItemText>transmitBuffer_to_USB</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
+<<<<<<< HEAD
           <ItemText>hspi-&gt;RxISR</ItemText>
         </Ww>
         <Ww>
@@ -234,6 +271,9 @@
           <count>10</count>
           <WinNumber>1</WinNumber>
           <ItemText>hcdc</ItemText>
+=======
+          <ItemText>receiveBuffer_from_SPI</ItemText>
+>>>>>>> e201f230350beea4bf5953d17ee317575410912e
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -380,7 +420,7 @@
 
   <Group>
     <GroupName>Drivers/STM32F0xx_HAL_Driver</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

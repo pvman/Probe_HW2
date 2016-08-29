@@ -283,12 +283,12 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len)
  if (hcdc->TxState != 0){
     return USBD_BUSY;
  }
- //PVV USBD_CDC_SetTxBuffer(hUsbDevice_0, Buf, Len);
-//PVV  result = USBD_CDC_TransmitPacket(hUsbDevice_0);
+	USBD_CDC_SetTxBuffer(hUsbDevice_0, Buf, Len);
+	result = USBD_CDC_TransmitPacket(hUsbDevice_0);
 	  /* USER CODE BEGIN 8 */
-  memcpy(UserTxBufferFS,Buf,Len);
-  USBD_CDC_SetTxBuffer(hUsbDevice_0, UserTxBufferFS, Len);
-  result = USBD_CDC_TransmitPacket(hUsbDevice_0);
+ // memcpy(UserTxBufferFS,Buf,Len);
+ // USBD_CDC_SetTxBuffer(hUsbDevice_0, UserTxBufferFS, Len);
+ // result = USBD_CDC_TransmitPacket(hUsbDevice_0);
 	
   /* USER CODE END 8 */ 
   return result;
