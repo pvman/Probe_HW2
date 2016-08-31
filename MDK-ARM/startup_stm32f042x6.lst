@@ -432,11 +432,19 @@ ARM Macro Assembler    Page 7
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0 --apcs=interw
 ork --depend=probe_hw2\startup_stm32f042x6.d -oprobe_hw2\startup_stm32f042x6.o 
+<<<<<<< HEAD
 -IF:\Altium_projects\Volkovets\GitHub\Probe_HW2\MDK-ARM\RTE -IC:\Keil_v5\ARM\PA
 CK\ARM\CMSIS\4.5.0\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\1.5.0
 \Device\Include --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --p
 redefine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine="S
 TM32F042x6 SETA 1" --list=.\startup_stm32f042x6.lst startup_stm32f042x6.s
+=======
+-IF:\WORK\Volkovets\GitHub\Probe_HW2\MDK-ARM\RTE -IC:\Keil_v5\ARM\PACK\ARM\CMSI
+S\5.0.0-Beta4\CMSIS\Include -IC:\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\1.5.0\Devi
+ce\Include --predefine="__EVAL SETA 1" --predefine="__MICROLIB SETA 1" --predef
+ine="__UVISION_VERSION SETA 518" --predefine="_RTE_ SETA 1" --predefine="STM32F
+042x6 SETA 1" --list=.\startup_stm32f042x6.lst startup_stm32f042x6.s
+>>>>>>> c4e7a08824cdd4a93f61bd5062a08c543f1ba2c3
 
 
 
