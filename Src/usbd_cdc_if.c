@@ -32,6 +32,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usbd_cdc_if.h"
+#include "fifo.h"
+extern FIFO8(256)		USBrx_to_FIFO_to_SPI;	
 /* USER CODE BEGIN INCLUDE */
 static uint8_t lineCoding[7]        // <------- add these three lines
      // 115200bps,            1stop, no parity, 8bit
@@ -257,9 +259,15 @@ static int8_t CDC_Control_FS  (uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS (uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-//PVV  USBD_CDC_SetRxBuffer(hUsbDevice_0, &Buf[0]);
+  USBD_CDC_SetRxBuffer(hUsbDevice_0, &Buf[0]);
 	//	 CDC_Transmit_FS(Buf, *Len); //disable echo
   USBD_CDC_ReceivePacket(hUsbDevice_0);
+	
+		if (!FIFO8_IS_FULL(USBrx_to_FIFO_to_SPI))
+		{
+			FIFO8_PUSH (USBrx_to_FIFO_to_SPI, Buf[0]);
+		}
+	
   return (USBD_OK);
   /* USER CODE END 6 */ 
 }
